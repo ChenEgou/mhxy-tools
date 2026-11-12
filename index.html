@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>梦·工具</title>
+<meta name="theme-color" content="#17705f">
+<link rel="icon" type="image/png" href="img/favicon-64.png">
+<link rel="apple-touch-icon" href="img/icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<!-- 网页字体不阻塞页面：连不上谷歌时直接用系统字体，不会白屏等待 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="css/app.css?v=20261112115751">
+</head>
+<body>
+<div id="app"><p class="boot">正在读取数据…</p></div>
+<!-- 按顺序加载：同步 → 通用 → 游戏数据 → 存云端 → 藏宝阁价格表 → 各页面 → 外壳与启动 -->
+<script src="js/sync.js?v=20261112115751"></script>
+<script src="js/core.js?v=20261112115751"></script>
+<script src="js/gamedata.js?v=20261112115751"></script>
+<script src="js/cloud.js?v=20261112115751"></script>
+<script src="js/cbg.js?v=20261112115751"></script>
+<script src="js/pages/price.js?v=20261112115751"></script>
+<script src="js/pages/run.js?v=20261112115751"></script>
+<script src="js/pages/calc.js?v=20261112115751"></script>
+<script src="js/app.js?v=20261112115751"></script>
+</body>
+</html>
