@@ -329,8 +329,12 @@ svg text{font-family:var(--font-body);font-variant-numeric:tabular-nums}
 .sumc .k{font-size:12px;color:var(--muted)}
 .sumc .v{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
 .sumc .v small{font-size:12px;font-weight:500;color:var(--muted);margin-left:4px}
-.rh{min-width:640px}
-.rh td.res{white-space:normal;max-width:220px}
+.rh{min-width:700px}
+/* 跑出：物品名靠左；按藏宝阁价估的，名字后面跟一个小标签写当时的元价 */
+.rh th.tl-h,.rh td.res{text-align:left}
+.rh td.res{white-space:nowrap;font-weight:500}
+.rh .yp{display:inline-block;margin-left:8px;padding:0 7px;border:1px solid var(--line);border-radius:999px;font-size:12px;font-weight:400;line-height:18px;color:var(--muted);font-variant-numeric:tabular-nums;vertical-align:1px}
+.rh td.num{font-variant-numeric:tabular-nums}
 .rh td.good{color:var(--good);font-weight:700} .rh td.bad{color:var(--bad);font-weight:700}
 /* ===== 等级计算 ===== */
 .cwrap{display:grid;grid-template-columns:176px minmax(0,1fr);gap:18px;align-items:start}

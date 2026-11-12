@@ -194,7 +194,7 @@ function runShell(){
     '</div></section>';
   h+='<section class="card" aria-label="历史"><div class="card-head"><h2>历史</h2><span id="h-status" class="status"></span></div>'+
     '<div class="sums" id="h-sum"></div>'+
-    '<div class="scroll hist-wrap"><table class="hist rh"><thead><tr><th>日期</th><th>积分</th><th class="tl-h">跑出</th><th>额外</th><th>花费</th><th>修炼经验</th><th>盈亏</th><th></th></tr></thead><tbody id="h-body"></tbody></table></div></section>';
+    '<div class="scroll hist-wrap"><table class="hist rh"><thead><tr><th>日期</th><th>积分</th><th class="tl-h">跑出</th><th>估价</th><th>额外</th><th>花费</th><th>修炼经验</th><th>盈亏</th><th></th></tr></thead><tbody id="h-body"></tbody></table></div></section>';
   return h;
 }
 /* 格子分块：找人单独最大；环装；家具药品；花乐器；宝宝。每块一个颜色 */
@@ -300,12 +300,13 @@ function renderRounds(){
     var v=roundView(r);sExp+=+v.exp||0;sCost+=+r.cost||0;if(v.pl!=null){sPl+=v.pl;nPl++}
     var ex=r.ex==="tu"?"家具图":(r.ex?EXTRA[r.ex]:"—");
     h+='<tr><td class="date">'+esc(String(r.date||"").slice(5))+(r.lo?' <span class="hint">本机</span>':'')+'</td><td>'+r.score+'</td>'+
-      '<td class="res"'+(r.cbg?' title="'+(r.cbg.j?'藏宝阁只挂 '+esc(f(r.cbg.p,2))+' 元（垃圾价），按 '+JUNK_WAN+' 万记的':'按藏宝阁价估的：'+esc(f(r.cbg.p,2))+' 元'+(r.cbg.f?'，扣 '+esc(f(r.cbg.f,1))+'% 手续费':'')+'，当时金价 '+esc(f(r.cbg.g,1))+' 元/3000万')+'"':'')+'>'+esc(r.res||(r.tl>0?r.tl+" 级":"—"))+(r.tie?' <span class="hint">'+f(r.tie,1)+' 万'+(r.cbg?' · ¥'+f(r.cbg.p,2):'')+'</span>':'')+'</td><td>'+esc(ex)+'</td>'+
+      '<td class="res"'+(r.cbg?' title="'+(r.cbg.j?'藏宝阁只挂 '+esc(f(r.cbg.p,2))+' 元（垃圾价），按 '+JUNK_WAN+' 万记的':'按藏宝阁价估的：'+esc(f(r.cbg.p,2))+' 元'+(r.cbg.f?'，扣 '+esc(f(r.cbg.f,1))+'% 手续费':'')+'，当时金价 '+esc(f(r.cbg.g,1))+' 元/3000万')+'"':'')+'>'+esc(r.res||(r.tl>0?r.tl+" 级":"—"))+(r.cbg?'<span class="yp">¥'+esc(f(r.cbg.p,2))+'</span>':'')+'</td>'+
+      '<td class="num">'+(r.tie?f(r.tie,1):'—')+'</td><td>'+esc(ex)+'</td>'+
       '<td>'+f(r.cost,1)+'</td><td>'+f(v.exp,0)+'</td>'+
       '<td class="'+(v.pl==null?"":v.pl>=0?"good":"bad")+'"><b>'+pm(v.pl)+'</b></td>'+
       '<td><button type="button" class="del x" data-rdel="'+esc(r.id)+'" aria-label="删除这一轮">×</button></td></tr>';
   });
-  if(!list.length)h='<tr><td colspan="8" class="hint">还没有</td></tr>';
+  if(!list.length)h='<tr><td colspan="9" class="hint">还没有</td></tr>';
   $("h-body").innerHTML=h;
   $("h-sum").innerHTML=
     '<div class="sumc"><div class="k">轮数</div><div class="v">'+list.length+'</div></div>'+
