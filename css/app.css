@@ -330,10 +330,13 @@ svg text{font-family:var(--font-body);font-variant-numeric:tabular-nums}
 .sumc .k{font-size:12px;color:var(--muted)}
 .sumc .v{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
 .sumc .v small{font-size:12px;font-weight:500;color:var(--muted);margin-left:4px}
-.rh{min-width:700px}
-/* 跑出：物品名靠左；按藏宝阁价估的，名字后面跟一个小标签写当时的元价 */
-.rh th.tl-h,.rh td.res{text-align:left}
-.rh td.res{white-space:nowrap;font-weight:500}
+/* 历史表格：列宽按比例定死、内容居中，页面多宽各列都是均匀排开的（不会挤在左边、右边空一大片） */
+.rh{min-width:820px;table-layout:fixed}
+.rh th,.rh td{text-align:center}
+.rh th:nth-child(1){width:11%}.rh th:nth-child(2){width:8%}.rh th:nth-child(3){width:22%}.rh th:nth-child(4){width:11%}.rh th:nth-child(5){width:11%}
+.rh th:nth-child(6){width:10%}.rh th:nth-child(7){width:12%}.rh th:nth-child(8){width:11%}.rh th:nth-child(9){width:4%}
+/* 跑出：按藏宝阁价估的，名字后面跟一个小标签写当时的元价 */
+.rh td.res{white-space:nowrap;font-weight:500;overflow:hidden;text-overflow:ellipsis}
 .rh .yp{display:inline-block;margin-left:8px;padding:0 7px;border:1px solid var(--line);border-radius:999px;font-size:12px;font-weight:400;line-height:18px;color:var(--muted);font-variant-numeric:tabular-nums;vertical-align:1px}
 .rh td.num{font-variant-numeric:tabular-nums}
 .rh td.good{color:var(--good);font-weight:700} .rh td.bad{color:var(--bad);font-weight:700}
