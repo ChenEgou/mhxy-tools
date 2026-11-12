@@ -43,7 +43,7 @@ function publishAll(okMsg,show,opt){
   return GH.save(state,opt.auto?"自动存云端":(okMsg||"存云端")).then(function(){
     embedded=state;cloudData=true;lsSet(cacheKey(),state);
     ACCOUNTS.forEach(function(a){SYNC.forEach(function(m,i){m.ack(a[0],snap[a[0]][i])})});
-    busy=false;autoErr="";syncStatus();afterSync();show(pre+"已存云端","ok");
+    busy=false;autoErr="";lastSaved=Date.now();syncStatus();afterSync();show(pre+"已存云端","ok");
     if(again){again=false;if(anyDirty())publishAll("",autoShow,{auto:true})}
     return true;
   },function(err){
@@ -63,17 +63,22 @@ function publishAll(okMsg,show,opt){
 }
 
 /* ========== 自动存云端 ==========
-   改动停下 AUTO_IDLE 后自动存；一直在改的话，从第一次改动算起最多 AUTO_MAX 存一次。
-   切走 / 关页面 / 网络恢复时马上存（flushSave）。没设密钥、云端没读到时不自动存。 */
-var AUTO_IDLE=8000,AUTO_MAX=60000,autoT=null,autoFirst=0,autoErr="";
+   两次存云端至少隔 AUTO_GAP，免得连着改的时候（一环一环地记）存个不停：
+     离上次存已经满了 AUTO_GAP：改动停下 AUTO_IDLE 就存；一直在改的话，从第一次改动算起最多等 AUTO_MAX。
+     还没满：等到满的那一刻再存。
+   切走页面、网络恢复时也按这个间隔来；关页面时不管间隔马上存。手动点「存云端」、结算不受这个限制。
+   没设密钥、云端没读到时不自动存。 */
+var AUTO_IDLE=8000,AUTO_MAX=60000,AUTO_GAP=600000,autoT=null,autoFirst=0,autoErr="",lastSaved=0;
 function autoSave(){
   if(!GH.ready()||!GH.canSave()||!anyDirty())return;
   var now=Date.now();if(!autoFirst)autoFirst=now;
   clearTimeout(autoT);
-  autoT=setTimeout(autoRun,Math.max(0,Math.min(AUTO_IDLE,autoFirst+AUTO_MAX-now)));
+  autoT=setTimeout(autoRun,Math.max(0,Math.min(AUTO_IDLE,autoFirst+AUTO_MAX-now),lastSaved+AUTO_GAP-now));
+  syncStatus();
 }
 function autoRun(){autoT=null;autoFirst=0;if(anyDirty())publishAll("",autoShow,{auto:true})}
-function flushSave(){if(GH.ready()&&GH.canSave()&&anyDirty()){clearTimeout(autoT);autoRun()}}
+/* force：不管离上次存了多久都存（关页面时用） */
+function flushSave(force){if(GH.ready()&&GH.canSave()&&anyDirty()&&(force===true||Date.now()-lastSaved>=AUTO_GAP)){clearTimeout(autoT);autoRun()}}
 /* 自动存的提示：成功不打扰（顶栏显示「已存云端」）；出错只提示一次，直到下次存成功 */
 function autoShow(t,kind){if((kind!=="err"&&kind!=="dirty")||t===autoErr)return;autoErr=t;toast(t,kind)}
 
@@ -113,7 +118,7 @@ function syncStatus(){
   else if(!canStore||storeBad){t="本机存不了，记得存云端";k="err"}
   else if(!GH.repo()){t="没设同步";k="dirty"}
   else if(!GH.canSave()){t=any?"未存云端 · 云端没读到":"云端没读到";k="err"}
-  else if(any){t=GH.ready()?"未存云端":"未存云端 · 没设密钥";k="dirty"}
+  else if(any){t=GH.ready()?(autoT?"稍后自动存云端":"未存云端"):"未存云端 · 没设密钥";k="dirty"}
   else{t="已存云端";k="ok"}
   el.textContent=t;el.className="status"+(k?" "+k:"");
   var b=$("run-cloud");if(b){b.disabled=busy;b.classList.toggle("ghost",!any)}

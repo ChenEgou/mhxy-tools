@@ -114,13 +114,13 @@ window.addEventListener("storage",function(e){
   if(document.hidden){location.reload();return}
   $("stale").hidden=false;
 });
-/* 自动同步：切走 / 关页面时马上存；切回页面、窗口获得焦点、网络恢复时检查云端有没有更新；页面开着时定时检查 */
+/* 自动同步：关页面时马上存，切走时离上次存够久了才存；切回页面、窗口获得焦点、网络恢复时检查云端有没有更新；页面开着时定时检查 */
 document.addEventListener("visibilitychange",function(){
   if(document.hidden){flushSave();return}
   if(!$("stale").hidden){location.reload();return}
   pullMerge();cbgPull();
 });
-window.addEventListener("pagehide",flushSave);
+window.addEventListener("pagehide",function(){flushSave(true)});
 window.addEventListener("focus",function(){pullMerge();cbgPull()});
 window.addEventListener("online",function(){pullMerge(true)});
 setInterval(function(){if(!document.hidden&&GH.ready())pullMerge()},POLL_MS);
